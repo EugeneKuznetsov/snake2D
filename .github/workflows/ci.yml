@@ -1,0 +1,78 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches-ignore:
+      - "master"
+
+jobs:
+  linux:
+    name: ${{ matrix.os }} / ${{ matrix.build_type }} / ${{ matrix.compiler.name }}
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [Ubuntu-22.04]
+        compiler:
+          - { name: "GNU-10", compiler: gcc, version: 10 }
+        build_type: ["Debug", "Release"]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup environment
+        run: |
+          sudo apt-get install -y --no-install-recommends libx11-dev libx11-xcb-dev libfontenc-dev libice-dev libsm-dev libxau-dev \
+            libxaw7-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxdmcp-dev libxext-dev libxfixes-dev libxi-dev libxinerama-dev \
+            libxkbfile-dev libxmu-dev libxmuu-dev libxpm-dev libxrandr-dev libxrender-dev libxres-dev libxss-dev libxt-dev libxtst-dev \
+            libxv-dev libxvmc-dev libxxf86vm-dev xtrans-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev \
+            libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev \
+            xkb-data libxcb-dri3-dev uuid-dev libxcb-util-dev libgl-dev libglx-dev libglu1-mesa-dev libopengl-dev
+          pip3 install conan
+          conan --version
+          conan profile new default --detect
+          conan profile update settings.build_type=${{ matrix.build_type }} default
+          conan profile update settings.compiler=${{ matrix.compiler.compiler }} default
+          conan profile update settings.compiler.version=${{ matrix.compiler.version }} default
+          conan profile update settings.compiler.libcxx=libstdc++11 default
+          conan remote add gamedev-center https://eugenekuznetsov.jfrog.io/artifactory/api/conan/gamedev-conan-local --insert 0
+
+      - name: Build
+        run: |
+          conan install . --install-folder=build
+          conan build . --build-folder=build --configure --build
+
+      - name: Test
+        run: |
+          conan build . --build-folder=build --test
+
+  windows:
+    name: ${{ matrix.os }} / ${{ matrix.build_type }} / ${{ matrix.compiler.name }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [Windows-2019]
+        compiler:
+          - { name: "Visual Studio 16", compiler: "Visual Studio", version: 16 }
+        build_type: ["Debug", "Release"]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup environment
+        run: |
+          pip install conan
+          conan --version
+          conan profile new default --detect
+          conan profile update settings.build_type=${{ matrix.build_type }} default
+          conan profile update settings.compiler='${{ matrix.compiler.compiler }}' default
+          conan profile update settings.compiler.version=${{ matrix.compiler.version }} default
+          conan remote add gamedev-center https://eugenekuznetsov.jfrog.io/artifactory/api/conan/gamedev-conan-local --insert 0
+
+      - name: Build
+        run: |
+          conan install . --install-folder=build
+          conan build . --build-folder=build --configure --build
+
+      - name: Test
+        run: |
+          conan build . --build-folder=build --test

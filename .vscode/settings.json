@@ -1,0 +1,11 @@
+{
+    "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+    "C_Cpp.autoAddFileAssociations": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "clang-format.style": "file",
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+    "files.eol": "\n"
+}

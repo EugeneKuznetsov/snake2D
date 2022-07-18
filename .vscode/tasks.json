@@ -1,0 +1,73 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "configure repository",
+            "dependsOn": [
+                "install tools",
+                "setup conan remote"
+            ],
+            "problemMatcher": [],
+            "group": "none"
+        },
+        {
+            "label": "setup conan remote",
+            "type": "shell",
+            "command": "conan remote add gamedev-center https://eugenekuznetsov.jfrog.io/artifactory/api/conan/gamedev-conan-local true --insert 0",
+            "problemMatcher": [],
+            "group": "none"
+        },
+        {
+            "label": "install tools",
+            "type": "shell",
+            "command": "pip3 install -r ${workspaceFolder}/.vscode/requirements.txt",
+            "problemMatcher": [],
+            "group": "none"
+        },
+        {
+            "label": "conan install",
+            "type": "shell",
+            "command": "conan install . --install-folder=build --update",
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "label": "conan build",
+            "type": "shell",
+            "command": "conan build . --build-folder=build --configure --build",
+            "dependsOn": [
+                "conan install"
+            ],
+            "problemMatcher": [
+                "$msCompile",
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "conan test",
+            "type": "shell",
+            "command": "conan build . --build-folder=build --test",
+            "dependsOn": [
+                "conan build"
+            ],
+            "problemMatcher": [
+                "$msCompile",
+                "$gcc"
+            ],
+            "group": "test"
+        },
+        {
+            "label": "conan create package",
+            "type": "shell",
+            "command": "conan create .",
+            "problemMatcher": [
+                "$msCompile",
+                "$gcc"
+            ],
+            "group": "build"
+        }
+    ]
+}
