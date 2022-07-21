@@ -17,7 +17,7 @@ class Snake2D(ConanFile):
     generators = "cmake_find_package"
     settings = "os", "compiler", "arch", "build_type"
     tool_requires = "cmake/[>3.20.x]", "ninja/[^1.11.x]", "gtest/[~1.11.x]"
-    requires = "gamedevkit/[^1.x]@gamedev/stable"
+    requires = "gamedevkit/[^1.x]@gamedev/stable", "glm/[^0.9.x]"
 
     def __init__(self, output, runner, display_name="", user=None, channel=None):
         super().__init__(output, runner, display_name=display_name, user=user, channel=channel)
