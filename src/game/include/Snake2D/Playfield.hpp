@@ -3,6 +3,12 @@
 #include <tuple>
 
 struct Playfield {
+    Playfield(unsigned short rows, unsigned short cols)
+        : rows{rows}
+        , cols{cols}
+    {
+    }
+
     unsigned short rows{0};
     unsigned short cols{0};
 };

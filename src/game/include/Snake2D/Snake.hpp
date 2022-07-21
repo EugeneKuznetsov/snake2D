@@ -4,6 +4,9 @@
 
 class Snake {
 public:
+    explicit Snake(const Position& position);
+
+public:
     inline auto position() const -> const Position& { return position_; }
 
 private:
