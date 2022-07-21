@@ -6,7 +6,7 @@ from pathlib import Path
 required_conan_version = ">=1.45.0"
 
 class Snake2D(ConanFile):
-    name = "snake2d"
+    name = "snake2D"
     author = "Eugene Kuznetsov"
     license = "MIT"
     description = "2D snake game powered by GameDevKit"

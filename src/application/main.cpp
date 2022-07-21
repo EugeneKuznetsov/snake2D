@@ -10,10 +10,11 @@ auto main(int argc, char* argv[]) -> int
 {
     try {
         gamedevkit::Application application{argc, argv};
-        application.window(gamedevkit::WindowBuilder{"Snake 2D", {800, 600}}.opengl_profile_core().context_version(4, 0).build())
-            .game(std::make_shared<Game>())
-            .renderer(std::make_unique<Renderer>())
-            .setup();
+
+        auto window =
+            gamedevkit::WindowBuilder{"Snake 2D", {600, 600}}.opengl_profile_core().context_version(4, 0).resizable(false).build();
+
+        application.window(std::move(window)).game(std::make_shared<Game>()).renderer(std::make_shared<Renderer>()).setup();
 
         return application.run();
     }
