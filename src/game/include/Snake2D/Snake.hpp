@@ -26,4 +26,5 @@ private:
     std::list<Position> position_;
     Direction direction_;
     Velocity velocity_;
+    bool accept_direction_change_;
 };
