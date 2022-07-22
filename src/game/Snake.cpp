@@ -4,9 +4,11 @@
 
 #include "Snake2D/Playfield.hpp"
 
-Snake::Snake(const Position& position)
+Snake::Snake(const Position& position, const Velocity& velocity /*= {1}*/)
     : position_{position}
     , direction_{Direction::invalid}
+    , velocity_{velocity}
+    , accept_direction_change_{true}
 {
     position_.emplace_back(Position{position.row, static_cast<short>(position.col + 1)});
     position_.emplace_back(Position{position.row, static_cast<short>(position.col + 2)});
@@ -34,8 +36,10 @@ auto Snake::direction(const Direction& direction) -> void
             return;
     }
 
-    if (direction != direction_ && direction != bad_directions[direction_])
+    if (accept_direction_change_ && direction != direction_ && direction != bad_directions[direction_]) {
         direction_ = direction;
+        accept_direction_change_ = false;
+    }
 }
 
 auto Snake::move_on(const Playfield& playfield) -> void
@@ -74,4 +78,6 @@ auto Snake::move_on(const Playfield& playfield) -> void
         default:
             break;
     }
+
+    accept_direction_change_ = true;
 }
