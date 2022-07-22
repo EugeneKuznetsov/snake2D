@@ -21,13 +21,13 @@ public:
     auto SetUp() -> void
     {
         position_generator_ = std::make_shared<PositionPseudoGenerator>();
-        position_generator_->next_position(initial_pseudo_generated_position);
+        position_generator_->next_position(initial_pseudo_generated_position_);
 
         game_ = std::make_unique<Game>(position_generator_);
         game_->setup();
     }
 
-    const Position initial_pseudo_generated_position{1u, 1u};
+    const Position initial_pseudo_generated_position_{1u, 1u};
     std::unique_ptr<Game> game_{nullptr};
     std::shared_ptr<PositionPseudoGenerator> position_generator_{nullptr};
 };
@@ -51,6 +51,6 @@ TEST_F(the_game, should_initialize_snake_in_pseudo_random_position_after_setup)
 {
     ASSERT_TRUE(nullptr != game_->snake());
 
-    const auto expected_position = initial_pseudo_generated_position;
-    EXPECT_TRUE(expected_position == game_->snake()->position());
+    const auto expected_position = initial_pseudo_generated_position_;
+    EXPECT_TRUE(expected_position == game_->snake()->position().front());
 }
