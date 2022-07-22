@@ -13,6 +13,7 @@ enum class Modifier;
 struct Playfield;
 class PositionGenerator;
 class Snake;
+class Stopwatch;
 
 class Game : public gamedevkit::AbstractGame {
 public:
@@ -33,6 +34,7 @@ private:
 
 private:
     std::shared_ptr<PositionGenerator> position_generator_;
+    std::unique_ptr<Stopwatch> stopwatch_;
     std::unique_ptr<Playfield> playfield_;
     std::unique_ptr<Snake> snake_;
 };

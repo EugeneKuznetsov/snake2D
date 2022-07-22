@@ -7,6 +7,7 @@
 #include "Snake2D/Playfield.hpp"
 #include "Snake2D/PositionGenerator.hpp"
 #include "Snake2D/Snake.hpp"
+#include "Snake2D/Stopwatch.hpp"
 
 constexpr auto playfield_max_rows = 60;
 constexpr auto playfield_max_cols = 60;
@@ -19,6 +20,7 @@ Game::Game()
 Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     : gamedevkit::AbstractGame()
     , position_generator_{std::move(position_generator)}
+    , stopwatch_{std::make_unique<Stopwatch>()}
     , playfield_{std::make_unique<Playfield>(playfield_max_rows, playfield_max_cols)}
     , snake_{nullptr}
 {
@@ -34,7 +36,14 @@ auto Game::setup() -> void
 
 auto Game::update() -> void
 {
-    snake_->move_on(*playfield_);
+    if (false == stopwatch_->running())
+        return;
+
+    const auto ms_per_move = snake_->velocity().ms_per_position();
+    if (const auto elapsed = stopwatch_->elapsed(); elapsed >= ms_per_move) {
+        snake_->move_on(*playfield_);
+        stopwatch_->lap(elapsed - ms_per_move);
+    }
 }
 
 auto Game::input(const gamedevkit::input::keyboard::Key& key,
@@ -49,6 +58,12 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
                                                                    {keyboard::Key::key_up, Direction::up},
                                                                    {keyboard::Key::key_right, Direction::right},
                                                                    {keyboard::Key::key_down, Direction::down}};
-    if (directions.find(key) != directions.cend())
+    if (directions.find(key) != directions.cend()) {
         snake_->direction(directions[key]);
+
+        if (false == stopwatch_->running()) {
+            stopwatch_->start();
+            snake_->move_on(*playfield_);
+        }
+    }
 }

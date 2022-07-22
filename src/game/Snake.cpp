@@ -4,9 +4,10 @@
 
 #include "Snake2D/Playfield.hpp"
 
-Snake::Snake(const Position& position)
+Snake::Snake(const Position& position, const Velocity& velocity /*= {1}*/)
     : position_{position}
     , direction_{Direction::invalid}
+    , velocity_{velocity}
 {
     position_.emplace_back(Position{position.row, static_cast<short>(position.col + 1)});
     position_.emplace_back(Position{position.row, static_cast<short>(position.col + 2)});
