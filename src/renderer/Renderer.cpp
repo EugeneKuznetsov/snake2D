@@ -29,8 +29,8 @@ auto Renderer::setup(std::shared_ptr<gamedevkit::AbstractGame> game) -> void
     sprite_renderer_ = std::make_unique<SpriteRenderer>();
     sprite_renderer_->setup(frame_buffer_size_.width,
                             frame_buffer_size_.height,
-                            frame_buffer_size_.width / playfield->rows,
-                            frame_buffer_size_.height / playfield->cols);
+                            frame_buffer_size_.width / playfield->cols,
+                            frame_buffer_size_.height / playfield->rows);
 }
 
 auto Renderer::render() -> void

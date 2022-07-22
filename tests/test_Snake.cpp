@@ -19,8 +19,8 @@ public:
 public:
     std::unique_ptr<Snake> snake_{nullptr};
     const Position head_position_{1u, 1u};
-    const Position torso_position_{head_position_.row, head_position_.col + 1u};
-    const Position tail_position_{torso_position_.row, torso_position_.col + 1u};
+    const Position torso_position_{head_position_.row, static_cast<unsigned short>(head_position_.col + 1u)};
+    const Position tail_position_{torso_position_.row, static_cast<unsigned short>(torso_position_.col + 1u)};
 };
 
 TEST_F(the_snake, initializes_horizontally_positions_for_head_torso_and_tail)

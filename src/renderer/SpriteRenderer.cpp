@@ -40,8 +40,8 @@ auto SpriteRenderer::setup(const int viewport_width, const int viewport_height, 
 
 auto SpriteRenderer::render(const Position& position) -> void
 {
-    const auto sprite_object_x = (position.row * sprite_width_) - sprite_width_;
-    const auto sprite_object_y = (position.col * sprite_height_) - sprite_height_;
+    const auto sprite_object_x = (position.col * sprite_width_) - sprite_width_;
+    const auto sprite_object_y = (position.row * sprite_height_) - sprite_height_;
 
     glm::mat4 sprite_position{1.0f};
     sprite_position = glm::translate(sprite_position, glm::vec3{sprite_object_x, sprite_object_y, 0.0f});
