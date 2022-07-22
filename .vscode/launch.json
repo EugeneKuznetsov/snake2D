@@ -9,15 +9,14 @@
             "request": "launch",
             "type": "cppdbg",
             "program": "",
-            "preLaunchTask": "conan build",
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/build/bin",
             "windows": {
                 "type": "cppvsdbg",
-                "program": "${workspaceRoot}/build/bin/snake2d.exe"
+                "program": "snake2d.exe"
             },
             "linux": {
                 "type": "cppdbg",
-                "program": "${workspaceRoot}/build/bin/snake2d"
+                "program": "snake2d"
             }
         }
     ]
