@@ -4,15 +4,15 @@
 
 class PositionGenerator {
 public:
-    auto boundaries(const Position minimum, const Position maximum) -> void;
+    auto boundaries(const Position& minimum, const Position& maximum) -> void;
 
 public:
     virtual auto generate() const -> Position;
 
 private:
-    auto generate_random_number(const unsigned short minimum, const unsigned short maximum) const -> unsigned short;
+    auto generate_random_number(const short minimum, const short maximum) const -> short;
 
 private:
-    Position minimum_{0u, 0u};
-    Position maximum_{0u, 0u};
+    Position minimum_{0, 0};
+    Position maximum_{0, 0};
 };

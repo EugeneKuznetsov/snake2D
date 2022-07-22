@@ -3,8 +3,8 @@
 #include <tuple>
 
 struct Position {
-    unsigned short row{0u};
-    unsigned short col{0u};
+    short row{0};
+    short col{0};
 };
 
 constexpr auto operator==(const Position& left, const Position& right) -> bool

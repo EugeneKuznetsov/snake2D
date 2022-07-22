@@ -18,7 +18,7 @@ public:
     inline auto position() const -> const std::list<Position>& { return position_; }
 
 public:
-    auto move(const Playfield& playfield) -> void;
+    auto move_on(const Playfield& playfield) -> void;
 
 private:
     std::list<Position> position_;

@@ -3,14 +3,14 @@
 #include <tuple>
 
 struct Playfield {
-    Playfield(unsigned short rows, unsigned short cols)
+    Playfield(short rows, short cols)
         : rows{rows}
         , cols{cols}
     {
     }
 
-    unsigned short rows{0};
-    unsigned short cols{0};
+    short rows{0};
+    short cols{0};
 };
 
 constexpr auto operator==(const Playfield& left, const Playfield& right) -> bool

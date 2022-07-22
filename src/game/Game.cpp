@@ -6,8 +6,8 @@
 #include "Snake2D/PositionGenerator.hpp"
 #include "Snake2D/Snake.hpp"
 
-constexpr auto playfield_max_rows = 60u;
-constexpr auto playfield_max_cols = 60u;
+constexpr auto playfield_max_rows = 60;
+constexpr auto playfield_max_cols = 60;
 
 Game::Game()
     : Game{std::make_shared<PositionGenerator>()}
