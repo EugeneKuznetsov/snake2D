@@ -101,6 +101,7 @@ TEST_P(the_game_input, should_update_snake_position_when_possible)
         expected_position.row = 1;
 
     as_abstract_game()->input(test_case_param.actual_key, test_case_param.actual_action, {});
+    as_abstract_game()->update();
 
     EXPECT_EQ(snake_head_position, expected_position);
 }

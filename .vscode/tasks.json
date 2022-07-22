@@ -27,7 +27,7 @@
         {
             "label": "conan install",
             "type": "shell",
-            "command": "conan install . --install-folder=build --update",
+            "command": "conan install . --install-folder=build",
             "problemMatcher": [],
             "group": "build"
         },

@@ -1,7 +1,6 @@
 #include "Snake2D/Snake.hpp"
 
 #include <unordered_map>
-#include <iostream>
 
 #include "Snake2D/Playfield.hpp"
 
@@ -25,8 +24,6 @@ auto Snake::direction(const Direction& direction) -> void
 
         const auto head_torso_diff_x = head.col - torso.col;
         const auto head_torso_diff_y = head.row - torso.row;
-        std::cout << "head_torso_diff_x -> " << head_torso_diff_x << std::endl;
-        std::cout << "head_torso_diff_y -> " << head_torso_diff_y << std::endl;
         if (head_torso_diff_x > 0 && direction == bad_directions[Direction::right])
             return;
         else if (head_torso_diff_x < 0 && direction == bad_directions[Direction::left])
