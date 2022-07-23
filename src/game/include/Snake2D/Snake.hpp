@@ -22,6 +22,7 @@ public:
 
 public:
     auto move_on(const Playfield& playfield, const std::function<bool(const Position&)> snake_can_grow_predicate = nullptr) -> void;
+    auto increase_velocity() -> void;
 
 private:
     auto calculate_head_next_position(const Playfield& playfield) -> Position;

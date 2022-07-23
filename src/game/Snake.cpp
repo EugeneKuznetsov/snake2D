@@ -64,6 +64,11 @@ auto Snake::move_on(const Playfield& playfield, const std::function<bool(const P
     accept_direction_change_ = true;
 }
 
+auto Snake::increase_velocity() -> void
+{
+    velocity_.positions_per_second++;
+}
+
 auto Snake::calculate_head_next_position(const Playfield& playfield) -> Position
 {
     auto head = position_.front();

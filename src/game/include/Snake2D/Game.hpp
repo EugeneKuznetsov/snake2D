@@ -50,4 +50,6 @@ private:
     std::unique_ptr<Playfield> playfield_;
     std::unique_ptr<Snake> snake_;
     std::unique_ptr<Position> food_;
+
+    std::size_t food_eaten_;
 };

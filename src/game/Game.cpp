@@ -25,6 +25,7 @@ Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     , playfield_{std::make_unique<Playfield>(playfield_max_rows_, playfield_max_cols_)}
     , snake_{nullptr}
     , food_{nullptr}
+    , food_eaten_{0u}
 {
     position_generator_->boundaries({1, 1}, {playfield_->rows, playfield_->cols});
 }
@@ -48,8 +49,12 @@ auto Game::update() -> void
     const auto ms_per_move = snake_->velocity().ms_per_position();
     if (const auto elapsed = snake_movement_stopwatch_->elapsed(); elapsed >= ms_per_move) {
         snake_->move_on(*playfield_, std::bind(&Game::snake_can_eat_food, this, std::placeholders::_1));
-        if (snake_can_eat_food(snake_->position().front()))
+        if (snake_can_eat_food(snake_->position().front())) {
+            food_eaten_++;
+            if (food_eaten_ % 2 == 0)
+                snake_->increase_velocity();
             generate_food();
+        }
         snake_movement_stopwatch_->lap(elapsed - ms_per_move);
     }
 }
