@@ -9,7 +9,7 @@ public:
 
 public:
     auto start() -> void;
-    auto lap(const std::chrono::milliseconds& lag) -> void;
+    auto lap(const std::chrono::milliseconds& lag = std::chrono::milliseconds::zero()) -> void;
 
 private:
     bool running_{false};

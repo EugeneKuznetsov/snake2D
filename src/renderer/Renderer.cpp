@@ -38,6 +38,8 @@ auto Renderer::render() -> void
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    sprite_renderer_->render(*game_->food());
+
     for (const auto& position : game_->snake()->position())
         sprite_renderer_->render(position);
 }

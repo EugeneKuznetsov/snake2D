@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <memory>
 
 #include <GDK/AbstractGame.hpp>
@@ -11,6 +12,7 @@ enum class Modifier;
 }  // namespace gamedevkit::input::keyboard
 
 struct Playfield;
+struct Position;
 class PositionGenerator;
 class Snake;
 class Stopwatch;
@@ -24,6 +26,7 @@ public:
 public:
     inline auto playfield() const -> const std::unique_ptr<Playfield>& { return playfield_; }
     inline auto snake() const -> const std::unique_ptr<Snake>& { return snake_; }
+    inline auto food() const -> const std::unique_ptr<Position>& { return food_; }
 
 private:
     auto setup() -> void override;
@@ -33,8 +36,17 @@ private:
                const std::set<gamedevkit::input::keyboard::Modifier>& modifiers) -> void override;
 
 private:
+    auto generate_food() -> void;
+
+private:
+    const std::chrono::milliseconds food_expires_in_;
+    const short playfield_max_rows_;
+    const short playfield_max_cols_;
+
     std::shared_ptr<PositionGenerator> position_generator_;
-    std::unique_ptr<Stopwatch> stopwatch_;
+    std::unique_ptr<Stopwatch> snake_movement_stopwatch_;
+    std::unique_ptr<Stopwatch> food_generator_stopwatch_;
     std::unique_ptr<Playfield> playfield_;
     std::unique_ptr<Snake> snake_;
+    std::unique_ptr<Position> food_;
 };

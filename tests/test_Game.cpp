@@ -9,7 +9,7 @@
 
 class PositionPseudoGenerator : public PositionGenerator {
 public:
-    auto generate() const -> Position override { return next_position_; }
+    auto generate(const std::list<Position>& = {}) const -> Position override { return next_position_; }
 
 public:
     auto next_position(const Position& position) -> void { next_position_ = position; }
@@ -84,7 +84,7 @@ const auto snake_movement_params = testing::Values(game_input_params{keyboard::K
 INSTANTIATE_TEST_SUITE_P(, the_game_input, snake_movement_params);
 TEST_P(the_game_input, should_update_snake_position_when_possible)
 {
-    const auto test_case_param = GetParam();
+    const auto& test_case_param = GetParam();
     const auto& playfield = *game_->playfield();
     const auto& snake_head_position = game_->snake()->position().front();
 
