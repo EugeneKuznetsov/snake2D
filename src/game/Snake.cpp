@@ -4,7 +4,7 @@
 
 #include "Snake2D/Playfield.hpp"
 
-Snake::Snake(const Position& position, const Velocity& velocity /*= {1}*/)
+Snake::Snake(const Position& position, const Velocity& velocity /*= {2}*/)
     : position_{position}
     , direction_{Direction::invalid}
     , velocity_{velocity}
@@ -42,15 +42,15 @@ auto Snake::direction(const Direction& direction) -> void
     }
 }
 
-auto Snake::move_on(const Playfield& playfield) -> void
+auto Snake::move_on(const Playfield& playfield, const std::function<bool(const Position&)> grow_predicate /*= nullptr*/) -> void
 {
     if (Direction::invalid == direction_)
         return;
 
-    auto previous_iter = position_.rbegin();
+    auto previous_body_part_position = position_.rbegin();
     for (auto iter = ++position_.rbegin(); iter != position_.rend(); ++iter) {
-        *previous_iter = *iter;
-        previous_iter = iter;
+        *previous_body_part_position = *iter;
+        previous_body_part_position = iter;
     }
 
     auto& head = position_.front();

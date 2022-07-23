@@ -82,3 +82,10 @@ TEST_F(the_snake, head_will_not_move_towards_torso_when_changing_direction_towar
     tail_position_.col--;
     EXPECT_POSITION({head_position_, torso_position_, tail_position_});
 }
+
+TEST_F(the_snake, tail_remains_on_the_same_position_when_requested_to_grow_during_movement)
+{
+    snake_->direction(Direction::left);
+    snake_->move_on(playfield_, [](const auto&) -> bool { return true; });
+    EXPECT_POSITION({{head_position_.row, playfield_.cols}, head_position_, torso_position_, tail_position_});
+}
