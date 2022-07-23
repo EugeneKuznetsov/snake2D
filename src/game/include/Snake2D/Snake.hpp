@@ -11,7 +11,7 @@ struct Playfield;
 
 class Snake {
 public:
-    explicit Snake(const Position& position, const Velocity& velocity = {2});
+    explicit Snake(const Position& position, const Velocity& velocity = {4});
 
 public:
     auto direction(const Direction& direction) -> void;

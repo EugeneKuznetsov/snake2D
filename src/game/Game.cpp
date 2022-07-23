@@ -49,12 +49,19 @@ auto Game::update() -> void
     const auto ms_per_move = snake_->velocity().ms_per_position();
     if (const auto elapsed = snake_movement_stopwatch_->elapsed(); elapsed >= ms_per_move) {
         snake_->move_on(*playfield_, std::bind(&Game::snake_can_eat_food, this, std::placeholders::_1));
+
+        if (snake_->dead()) {
+            reset();
+            return;
+        }
+
         if (snake_can_eat_food(snake_->position().front())) {
             food_eaten_++;
             if (food_eaten_ % 2 == 0)
                 snake_->increase_velocity();
             generate_food();
         }
+
         snake_movement_stopwatch_->lap(elapsed - ms_per_move);
     }
 }
@@ -80,6 +87,15 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
             snake_->move_on(*playfield_, std::bind(&Game::snake_can_eat_food, this, std::placeholders::_1));
         }
     }
+}
+
+auto Game::reset() -> void
+{
+    snake_movement_stopwatch_ = std::make_unique<Stopwatch>();
+    food_generator_stopwatch_ = std::make_unique<Stopwatch>();
+    snake_ = std::make_unique<Snake>(position_generator_->generate());
+    generate_food();
+    food_eaten_ = 0u;
 }
 
 auto Game::generate_food() -> void

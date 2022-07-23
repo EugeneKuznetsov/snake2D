@@ -36,6 +36,7 @@ private:
                const std::set<gamedevkit::input::keyboard::Modifier>& modifiers) -> void override;
 
 private:
+    auto reset() -> void;
     auto generate_food() -> void;
     auto snake_can_eat_food(const Position& snake_head) -> bool;
 
