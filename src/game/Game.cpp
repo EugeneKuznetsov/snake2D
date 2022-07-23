@@ -24,7 +24,7 @@ Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     , playfield_{std::make_unique<Playfield>(playfield_max_rows, playfield_max_cols)}
     , snake_{nullptr}
 {
-    position_generator_->boundaries({0, 0}, {playfield_->rows, playfield_->cols});
+    position_generator_->boundaries({1, 1}, {playfield_->rows, playfield_->cols});
 }
 
 Game::~Game() = default;
