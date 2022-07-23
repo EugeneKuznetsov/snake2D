@@ -42,6 +42,11 @@ auto Snake::direction(const Direction& direction) -> void
     }
 }
 
+auto Snake::dead() const -> bool
+{
+    return false;
+}
+
 auto Snake::move_on(const Playfield& playfield, const std::function<bool(const Position&)> snake_can_grow_predicate /*= nullptr*/) -> void
 {
     if (Direction::invalid == direction_)

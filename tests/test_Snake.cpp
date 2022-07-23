@@ -21,7 +21,7 @@ public:
     Position head_position_{1, 1};
     Position torso_position_{head_position_.row, static_cast<short>(head_position_.col + 1)};
     Position tail_position_{torso_position_.row, static_cast<short>(torso_position_.col + 1)};
-    const Playfield playfield_{4, 4};
+    const Playfield playfield_{3, 3};
 };
 
 TEST_F(the_snake, initializes_horizontally_positions_for_head_torso_and_tail)
@@ -88,4 +88,23 @@ TEST_F(the_snake, tail_remains_on_the_same_position_when_requested_to_grow_durin
     snake_->direction(Direction::left);
     snake_->move_on(playfield_, [](const auto&) -> bool { return true; });
     EXPECT_POSITION({{head_position_.row, playfield_.cols}, head_position_, torso_position_, tail_position_});
+}
+
+TEST_F(the_snake, dead_returns_true_when_snake_hits_itself)
+{
+    snake_->direction(Direction::left);
+    snake_->move_on(playfield_, [](const auto&) -> bool { return true; });
+    EXPECT_TRUE(snake_->dead());
+    EXPECT_POSITION({{head_position_.row, playfield_.cols}, head_position_, torso_position_, tail_position_});
+}
+
+TEST_F(the_snake, dead_returns_false_when_snake_does_not_hit_itself)
+{
+    snake_->direction(Direction::left);
+    snake_->move_on(playfield_);
+    EXPECT_FALSE(snake_->dead());
+    head_position_.col = playfield_.cols;
+    torso_position_.col--;
+    tail_position_.col--;
+    EXPECT_POSITION({{head_position_.row, playfield_.cols}, torso_position_, tail_position_});
 }
