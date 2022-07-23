@@ -20,9 +20,11 @@ Game::Game()
 Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     : gamedevkit::AbstractGame()
     , position_generator_{std::move(position_generator)}
-    , stopwatch_{std::make_unique<Stopwatch>()}
+    , snake_movement_stopwatch_{std::make_unique<Stopwatch>()}
+    , food_generator_stopwatch_{std::make_unique<Stopwatch>()}
     , playfield_{std::make_unique<Playfield>(playfield_max_rows, playfield_max_cols)}
     , snake_{nullptr}
+    , food_{nullptr}
 {
     position_generator_->boundaries({1, 1}, {playfield_->rows, playfield_->cols});
 }
@@ -32,17 +34,18 @@ Game::~Game() = default;
 auto Game::setup() -> void
 {
     snake_ = std::make_unique<Snake>(position_generator_->generate());
+    generate_food();
 }
 
 auto Game::update() -> void
 {
-    if (false == stopwatch_->running())
+    if (false == snake_movement_stopwatch_->running())
         return;
 
     const auto ms_per_move = snake_->velocity().ms_per_position();
-    if (const auto elapsed = stopwatch_->elapsed(); elapsed >= ms_per_move) {
+    if (const auto elapsed = snake_movement_stopwatch_->elapsed(); elapsed >= ms_per_move) {
         snake_->move_on(*playfield_);
-        stopwatch_->lap(elapsed - ms_per_move);
+        snake_movement_stopwatch_->lap(elapsed - ms_per_move);
     }
 }
 
@@ -61,9 +64,14 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
     if (directions.find(key) != directions.cend()) {
         snake_->direction(directions[key]);
 
-        if (false == stopwatch_->running()) {
-            stopwatch_->start();
+        if (false == snake_movement_stopwatch_->running()) {
+            snake_movement_stopwatch_->start();
             snake_->move_on(*playfield_);
         }
     }
+}
+
+auto Game::generate_food() -> void
+{
+    food_ = std::make_unique<Position>(position_generator_->generate(snake_->position()));
 }
