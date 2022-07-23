@@ -8,7 +8,7 @@ auto PositionGenerator::boundaries(const Position& minimum, const Position& maxi
     maximum_ = maximum;
 }
 
-auto PositionGenerator::generate() const -> Position
+auto PositionGenerator::generate(const std::list<Position>& /*exclude*/ /*= {}*/) const -> Position
 {
     return {generate_random_number(minimum_.row, maximum_.row), generate_random_number(minimum_.col, maximum_.col)};
 }

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     Snake2D
-    VERSION 1.0.1
+    VERSION 1.1.0
     LANGUAGES CXX)
 
 include(BuildSettings)
