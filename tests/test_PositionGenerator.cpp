@@ -32,3 +32,12 @@ TEST_P(position_generator, generates_single_left_position_when_everything_else_i
     const auto& test_case_params = GetParam();
     EXPECT_EQ(generator.generate(test_case_params.actual_excluded), test_case_params.expected_generated);
 }
+
+TEST(position_generator_exceptions, throws_runtime_error_when_all_possible_positions_should_be_excluded)
+{
+    PositionGenerator generator;
+    generator.boundaries({1, 1}, {2, 2});
+
+    const std::list<Position> exclude{{1, 1}, {1, 2}, {2, 1}, {2, 2}};
+    EXPECT_THROW(generator.generate(exclude), std::runtime_error);
+}
