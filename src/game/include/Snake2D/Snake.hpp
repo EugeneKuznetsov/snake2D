@@ -21,7 +21,10 @@ public:
     inline auto velocity() const -> const Velocity& { return velocity_; }
 
 public:
-    auto move_on(const Playfield& playfield, const std::function<bool(const Position&)> grow_predicate = nullptr) -> void;
+    auto move_on(const Playfield& playfield, const std::function<bool(const Position&)> snake_can_grow_predicate = nullptr) -> void;
+
+private:
+    auto calculate_head_next_position(const Playfield& playfield) -> Position;
 
 private:
     std::list<Position> position_;

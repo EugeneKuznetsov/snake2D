@@ -16,7 +16,7 @@ Game::Game()
 
 Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     : gamedevkit::AbstractGame()
-    , food_expires_in_{10000}
+    , food_expires_in_{15000}
     , playfield_max_rows_{60}
     , playfield_max_cols_{60}
     , position_generator_{std::move(position_generator)}
@@ -42,14 +42,14 @@ auto Game::update() -> void
     if (false == snake_movement_stopwatch_->running())
         return;
 
-    if (food_generator_stopwatch_->elapsed() >= food_expires_in_) {
+    if (food_generator_stopwatch_->elapsed() >= food_expires_in_)
         generate_food();
-        food_generator_stopwatch_->lap();
-    }
 
     const auto ms_per_move = snake_->velocity().ms_per_position();
     if (const auto elapsed = snake_movement_stopwatch_->elapsed(); elapsed >= ms_per_move) {
-        snake_->move_on(*playfield_);
+        snake_->move_on(*playfield_, std::bind(&Game::snake_can_eat_food, this, std::placeholders::_1));
+        if (snake_can_eat_food(snake_->position().front()))
+            generate_food();
         snake_movement_stopwatch_->lap(elapsed - ms_per_move);
     }
 }
@@ -72,7 +72,7 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
         if (false == snake_movement_stopwatch_->running()) {
             snake_movement_stopwatch_->start();
             food_generator_stopwatch_->start();
-            snake_->move_on(*playfield_);
+            snake_->move_on(*playfield_, std::bind(&Game::snake_can_eat_food, this, std::placeholders::_1));
         }
     }
 }
@@ -80,4 +80,11 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
 auto Game::generate_food() -> void
 {
     food_ = std::make_unique<Position>(position_generator_->generate(snake_->position()));
+    if (true == food_generator_stopwatch_->running())
+        food_generator_stopwatch_->lap();
+}
+
+auto Game::snake_can_eat_food(const Position& snake_head) -> bool
+{
+    return snake_head == *food_;
 }

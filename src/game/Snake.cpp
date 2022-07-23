@@ -42,18 +42,32 @@ auto Snake::direction(const Direction& direction) -> void
     }
 }
 
-auto Snake::move_on(const Playfield& playfield, const std::function<bool(const Position&)> grow_predicate /*= nullptr*/) -> void
+auto Snake::move_on(const Playfield& playfield, const std::function<bool(const Position&)> snake_can_grow_predicate /*= nullptr*/) -> void
 {
     if (Direction::invalid == direction_)
         return;
 
-    auto previous_body_part_position = position_.rbegin();
-    for (auto iter = ++position_.rbegin(); iter != position_.rend(); ++iter) {
-        *previous_body_part_position = *iter;
-        previous_body_part_position = iter;
+    auto head = calculate_head_next_position(playfield);
+
+    if (nullptr != snake_can_grow_predicate && true == snake_can_grow_predicate(head)) {
+        position_.insert(position_.begin(), head);
+    }
+    else {
+        auto previous_body_part_iter = position_.rbegin();
+        for (auto next_body_part_iter = ++position_.rbegin(); next_body_part_iter != position_.rend(); ++next_body_part_iter) {
+            *previous_body_part_iter = *next_body_part_iter;
+            previous_body_part_iter = next_body_part_iter;
+        }
+        position_.front() = head;
     }
 
-    auto& head = position_.front();
+    accept_direction_change_ = true;
+}
+
+auto Snake::calculate_head_next_position(const Playfield& playfield) -> Position
+{
+    auto head = position_.front();
+
     switch (direction_) {
         case Direction::left:
             --head.col;
@@ -79,5 +93,5 @@ auto Snake::move_on(const Playfield& playfield, const std::function<bool(const P
             break;
     }
 
-    accept_direction_change_ = true;
+    return head;
 }
