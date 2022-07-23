@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <memory>
 
 #include <GDK/AbstractGame.hpp>
@@ -38,6 +39,10 @@ private:
     auto generate_food() -> void;
 
 private:
+    const std::chrono::milliseconds food_expires_in_;
+    const short playfield_max_rows_;
+    const short playfield_max_cols_;
+
     std::shared_ptr<PositionGenerator> position_generator_;
     std::unique_ptr<Stopwatch> snake_movement_stopwatch_;
     std::unique_ptr<Stopwatch> food_generator_stopwatch_;

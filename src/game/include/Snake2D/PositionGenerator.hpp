@@ -18,5 +18,4 @@ private:
 private:
     Position minimum_{0, 0};
     Position maximum_{0, 0};
-    const Position invalid_position_{-1, -1};
 };

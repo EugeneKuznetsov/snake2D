@@ -12,7 +12,7 @@ auto Stopwatch::start() -> void
     running_ = true;
 }
 
-auto Stopwatch::lap(const std::chrono::milliseconds& lag) -> void
+auto Stopwatch::lap(const std::chrono::milliseconds& lag /*= std::chrono::milliseconds::zero()*/) -> void
 {
     const auto current = std::chrono::high_resolution_clock::now().time_since_epoch();
     lap_start_ = std::chrono::duration_cast<std::chrono::milliseconds>(current - lag);

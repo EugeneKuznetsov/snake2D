@@ -9,9 +9,6 @@
 #include "Snake2D/Snake.hpp"
 #include "Snake2D/Stopwatch.hpp"
 
-constexpr auto playfield_max_rows = 60;
-constexpr auto playfield_max_cols = 60;
-
 Game::Game()
     : Game{std::make_shared<PositionGenerator>()}
 {
@@ -19,10 +16,13 @@ Game::Game()
 
 Game::Game(std::shared_ptr<PositionGenerator> position_generator)
     : gamedevkit::AbstractGame()
+    , food_expires_in_{10000}
+    , playfield_max_rows_{60}
+    , playfield_max_cols_{60}
     , position_generator_{std::move(position_generator)}
     , snake_movement_stopwatch_{std::make_unique<Stopwatch>()}
     , food_generator_stopwatch_{std::make_unique<Stopwatch>()}
-    , playfield_{std::make_unique<Playfield>(playfield_max_rows, playfield_max_cols)}
+    , playfield_{std::make_unique<Playfield>(playfield_max_rows_, playfield_max_cols_)}
     , snake_{nullptr}
     , food_{nullptr}
 {
@@ -41,6 +41,11 @@ auto Game::update() -> void
 {
     if (false == snake_movement_stopwatch_->running())
         return;
+
+    if (food_generator_stopwatch_->elapsed() >= food_expires_in_) {
+        generate_food();
+        food_generator_stopwatch_->lap();
+    }
 
     const auto ms_per_move = snake_->velocity().ms_per_position();
     if (const auto elapsed = snake_movement_stopwatch_->elapsed(); elapsed >= ms_per_move) {
@@ -66,6 +71,7 @@ auto Game::input(const gamedevkit::input::keyboard::Key& key,
 
         if (false == snake_movement_stopwatch_->running()) {
             snake_movement_stopwatch_->start();
+            food_generator_stopwatch_->start();
             snake_->move_on(*playfield_);
         }
     }
