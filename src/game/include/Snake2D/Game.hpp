@@ -37,6 +37,7 @@ private:
 
 private:
     auto generate_food() -> void;
+    auto snake_can_eat_food(const Position& snake_head) -> bool;
 
 private:
     const std::chrono::milliseconds food_expires_in_;
